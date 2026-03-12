@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Calculadora de Horas</title>
+    <title>Calculadora Atacadão - Premium</title>
     <style>
         :root {
             --atacadao-orange: #F37021;
@@ -26,7 +26,7 @@
             justify-content: center; 
             align-items: flex-start; 
             min-height: 100vh; 
-            padding: 10px;
+            padding: 15px 10px;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -48,13 +48,15 @@
         
         .row { display: flex; gap: 12px; margin-bottom: 16px; width: 100%; }
         
-        @media (max-width: 360px) {
-            .row-ajuste { flex-direction: column; }
+        /* CORREÇÃO IOS: Empilha os campos em telas de celular para não quebrar o relógio do iPhone */
+        @media (max-width: 480px) {
+            .row { flex-direction: column; gap: 16px; }
         }
 
         .input-group { flex: 1; min-width: 0; }
         .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #b0b0b0; }
         
+        /* CORREÇÃO IOS: -webkit-appearance: none remove o estilo padrão da Apple */
         .input-group input, .input-group select { 
             width: 100%; 
             padding: 0 14px; 
@@ -66,8 +68,19 @@
             font-size: 16px; 
             color-scheme: dark; 
             outline: none;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
+        /* CORREÇÃO IOS: Adiciona a setinha de volta no Select */
+        .input-group select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b0b0b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
         .input-group input:focus, .input-group select:focus { border-color: var(--atacadao-orange); }
         .input-group input:disabled { opacity: 0.4; background-color: #1a1a1a; cursor: not-allowed; }
 
@@ -81,9 +94,15 @@
             cursor: pointer; 
             border: 1px solid #333; 
             user-select: none;
+            -webkit-tap-highlight-color: transparent; /* Remove pisca-pisca no clique do iOS */
         }
         
-        .toggle-container input { margin-right: 12px; width: 20px; height: 20px; accent-color: var(--atacadao-orange); }
+        .toggle-container input { 
+            margin-right: 12px; 
+            width: 20px; 
+            height: 20px; 
+            accent-color: var(--atacadao-orange); 
+        }
         .toggle-container label { cursor: pointer; font-size: 15px; color: white; font-weight: 600; flex: 1;}
 
         button { 
@@ -100,6 +119,7 @@
             letter-spacing: 1px;
             margin-top: 5px;
             box-shadow: 0 4px 15px rgba(0, 179, 0, 0.3);
+            -webkit-appearance: none;
         }
 
         .results { margin-top: 25px; padding-top: 5px;}
@@ -244,19 +264,15 @@
             const limite5h35 = addMinutes(entradaReal, (5 * 60) + 35);
             let saidaBruta = addMinutes(entradaReal, saldoMinutosReal + minutosIntervalo);
 
-            // LOGICA NOTURNA AJUSTADA:
-            // Conta a partir das 22h, mas só aplica desconto se ultrapassar 23h
             let minutosApos22h = 0;
             let ultrapassou23h = false;
             let checarHora = new Date(entradaReal.getTime());
             
             while (checarHora < saidaBruta) {
                 let horaH = checarHora.getHours();
-                // Acumula minutos no período noturno padrão (22h às 05h)
                 if (horaH >= 22 || horaH < 5) {
                     minutosApos22h++;
                 }
-                // Gatilho: Se em algum momento estiver trabalhando às 23h (ou depois até as 5h)
                 if (horaH >= 23 || (horaH >= 0 && horaH < 5)) {
                     ultrapassou23h = true;
                 }
