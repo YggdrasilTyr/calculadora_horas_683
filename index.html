@@ -26,13 +26,13 @@
             justify-content: center; 
             align-items: flex-start; 
             min-height: 100vh; 
-            padding: 10px; /* Menos padding lateral no mobile */
+            padding: 10px;
             -webkit-font-smoothing: antialiased;
         }
 
         .card { 
             background-color: var(--card-bg); 
-            border-radius: 16px; /* Bordas mais suaves para mobile */
+            border-radius: 16px; 
             box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
             width: 100%; 
             max-width: 500px; 
@@ -48,19 +48,17 @@
         
         .row { display: flex; gap: 12px; margin-bottom: 16px; width: 100%; }
         
-        /* Em telas muito pequenas, empilha os inputs de ajuste */
         @media (max-width: 360px) {
             .row-ajuste { flex-direction: column; }
         }
 
-        .input-group { flex: 1; min-width: 0; /* Previne estourar o flex no mobile */}
+        .input-group { flex: 1; min-width: 0; }
         .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #b0b0b0; }
         
-        /* Font-size 16px é obrigatório para o iOS não dar zoom automático */
         .input-group input, .input-group select { 
             width: 100%; 
             padding: 0 14px; 
-            height: 50px; /* Maior área de toque */
+            height: 50px; 
             background: var(--input-bg); 
             border: 1px solid var(--input-border); 
             border-radius: 10px; 
@@ -68,13 +66,9 @@
             font-size: 16px; 
             color-scheme: dark; 
             outline: none;
-            transition: border-color 0.2s;
         }
         
-        .input-group input:focus, .input-group select:focus {
-            border-color: var(--atacadao-orange);
-        }
-
+        .input-group input:focus, .input-group select:focus { border-color: var(--atacadao-orange); }
         .input-group input:disabled { opacity: 0.4; background-color: #1a1a1a; cursor: not-allowed; }
 
         .toggle-container { 
@@ -82,20 +76,14 @@
             align-items: center; 
             margin-bottom: 16px; 
             background: #242426; 
-            padding: 16px; /* Bem mais fácil de tocar */
+            padding: 16px; 
             border-radius: 10px; 
             cursor: pointer; 
             border: 1px solid #333; 
             user-select: none;
         }
         
-        .toggle-container input { 
-            margin-right: 12px; 
-            width: 20px; 
-            height: 20px; 
-            accent-color: var(--atacadao-orange); 
-        }
-        
+        .toggle-container input { margin-right: 12px; width: 20px; height: 20px; accent-color: var(--atacadao-orange); }
         .toggle-container label { cursor: pointer; font-size: 15px; color: white; font-weight: 600; flex: 1;}
 
         button { 
@@ -103,37 +91,32 @@
             background: var(--atacadao-green); 
             color: white; 
             border: none; 
-            height: 56px; /* Botão bem alto para o polegar */
+            height: 56px; 
             font-weight: bold; 
             border-radius: 12px; 
             cursor: pointer; 
             font-size: 18px; 
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: transform 0.1s, background 0.2s; 
             margin-top: 5px;
             box-shadow: 0 4px 15px rgba(0, 179, 0, 0.3);
         }
-        button:active { transform: scale(0.97); background: #009900; }
 
         .results { margin-top: 25px; padding-top: 5px;}
-        
         .scenario-box { background: #261f1a; border: 1px solid #4a2e1b; padding: 20px; border-radius: 12px; margin-bottom: 16px; }
         .scenario-box.alt { background: #1a2426; border-color: #1b3a4a; }
+        .scenario-title { font-size: 15px; font-weight: 800; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--atacadao-orange); }
         
-        .scenario-title { font-size: 15px; font-weight: 800; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--atacadao-orange); letter-spacing: 0.5px;}
-        .scenario-box.alt .scenario-title { color: var(--atacadao-blue); }
-
         .result-item { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
         .result-item .label { font-size: 13px; color: #a0a0a0; }
-        .result-item .value { font-size: 16px; font-weight: bold; color: #fff; text-align: right;}
+        .result-item .value { font-size: 16px; font-weight: bold; color: #fff; }
         
         .highlight-saida { margin-top: 16px; padding-top: 16px; border-top: 1px dashed rgba(255,255,255,0.2); display: flex; justify-content: space-between; align-items: center; }
         .highlight-saida .label { font-size: 14px; color: #fff; font-weight: bold;}
-        .highlight-saida .value { font-size: 28px; font-weight: 900; color: var(--atacadao-green); } /* Letra da saída bem maior */
+        .highlight-saida .value { font-size: 28px; font-weight: 900; color: var(--atacadao-green); }
 
-        .alert-box { background: rgba(255, 77, 77, 0.15); border: 1px solid var(--atacadao-red); color: #ff6b6b; padding: 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px; text-align: center; font-weight: bold; line-height: 1.5; }
-        .badge-bonus { background: rgba(243, 112, 33, 0.15); color: var(--atacadao-orange); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-top: 10px; display: block; border: 1px solid rgba(243, 112, 33, 0.4); text-align: center; text-transform: uppercase;}
+        .alert-box { background: rgba(255, 77, 77, 0.15); border: 1px solid var(--atacadao-red); color: #ff6b6b; padding: 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px; text-align: center; font-weight: bold; }
+        .badge-bonus { background: rgba(243, 112, 33, 0.1); color: var(--atacadao-orange); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-top: 10px; display: block; border: 1px solid rgba(243, 112, 33, 0.3); text-align: center; }
     </style>
 </head>
 <body onload="checkEscala()">
@@ -186,8 +169,7 @@
                 <button type="submit">Calcular</button>
             </form>
 
-            <div id="resultados" class="results" style="display: none;">
-                </div>
+            <div id="resultados" class="results" style="display: none;"></div>
         </div>
     </div>
 
@@ -203,7 +185,6 @@
             const escala = document.getElementById('escala').value;
             const campoIntervalo = document.getElementById('intervalo');
             const labelIntervalo = document.getElementById('label-intervalo');
-
             if (escala === 'deposito_sabado') {
                 campoIntervalo.value = "00:00";
                 campoIntervalo.disabled = true;
@@ -217,7 +198,6 @@
 
         function toggleBanco() {
             var box = document.getElementById('box-banco-horas');
-            // Timeout pequeno evita conflito de clique na label/checkbox no mobile
             setTimeout(() => {
                 box.style.display = document.getElementById('usar_ajuste').checked ? 'block' : 'none';
             }, 10);
@@ -237,7 +217,6 @@
             const h = String(data.getHours()).padStart(2, '0');
             const m = String(data.getMinutes()).padStart(2, '0');
             let texto = `${h}:${m}`;
-            
             if (data.getDate() !== referenciaOriginal.getDate()) {
                 texto += " <span style='font-size:11px; color:#aaa; font-weight:normal;'>(Amanhã)</span>";
             }
@@ -265,20 +244,31 @@
             const limite5h35 = addMinutes(entradaReal, (5 * 60) + 35);
             let saidaBruta = addMinutes(entradaReal, saldoMinutosReal + minutosIntervalo);
 
-            let minutosNoturnosTrabalhados = 0;
+            // LOGICA NOTURNA AJUSTADA:
+            // Conta a partir das 22h, mas só aplica desconto se ultrapassar 23h
+            let minutosApos22h = 0;
+            let ultrapassou23h = false;
             let checarHora = new Date(entradaReal.getTime());
             
             while (checarHora < saidaBruta) {
                 let horaH = checarHora.getHours();
+                // Acumula minutos no período noturno padrão (22h às 05h)
                 if (horaH >= 22 || horaH < 5) {
-                    minutosNoturnosTrabalhados++;
+                    minutosApos22h++;
+                }
+                // Gatilho: Se em algum momento estiver trabalhando às 23h (ou depois até as 5h)
+                if (horaH >= 23 || (horaH >= 0 && horaH < 5)) {
+                    ultrapassou23h = true;
                 }
                 checarHora = addMinutes(checarHora, 1);
             }
 
-            let bonusPorBloco = Math.floor(minutosNoturnosTrabalhados / 15) * 2;
-            let bonusExtraTeto = (minutosNoturnosTrabalhados > 120) ? -2 : 0;
-            let bonusTotal = bonusPorBloco + bonusExtraTeto;
+            let bonusTotal = 0;
+            if (ultrapassou23h) {
+                let bonusPorBloco = Math.floor(minutosApos22h / 15) * 2;
+                let bonusExtraTeto = (minutosApos22h > 120) ? -2 : 0;
+                bonusTotal = bonusPorBloco + bonusExtraTeto;
+            }
 
             let saidaFinal = addMinutes(saidaBruta, -bonusTotal);
             let proximoTurno = addMinutes(saidaFinal, 11 * 60);
@@ -297,32 +287,18 @@
             let html = `<div class='scenario-box ${classeExtra}'>
                             <div class='scenario-title'>${titulo}</div>
                             <div class='result-item'><span class='label'>📥 Entrada Ponto:</span><span class='value'>${dados.entrada}</span></div>
-                            <div class='result-item'><span class='label'>🕒 Limite Intervalo (5:35h):</span><span class='value' style='color: #ffcc00;'>${dados.limite_regra}</span></div>
+                            <div class='result-item'><span class='label'>🕒 Limite Intervalo:</span><span class='value' style='color: #ffcc00;'>${dados.limite_regra}</span></div>
                             <div class='result-item'><span class='label'>📅 Próximo Turno (11h):</span><span class='value' style='color: #bbb;'>${dados.proximo}</span></div>`;
-            
-            if (dados.alerta_critico) {
-                html += `<div class='alert-box'>🚨 CRÍTICO: Jornada acima de 5:35h direto sem intervalo!</div>`;
-            }
-
-            html += `<div class='highlight-saida'>
-                        <span class='label'>🚪 Bater Saída:</span>
-                        <span class='value'>${dados.saida}</span>
-                     </div>`;
-            
-            if (dados.bonus > 0) {
-                html += `<div class='badge-bonus'>🌙 Bônus Noturno: -${dados.bonus} Minutos</div>`;
-            }
-
+            if (dados.alerta_critico) html += `<div class='alert-box'>🚨 CRÍTICO: Jornada > 5:35h sem intervalo!</div>`;
+            html += `<div class='highlight-saida'><span class='label'>🚪 Bater Saída:</span><span class='value'>${dados.saida}</span></div>`;
+            if (dados.bonus > 0) html += `<div class='badge-bonus'>🌙 BÔNUS (APÓS 23H): -${dados.bonus} MIN</div>`;
             html += `</div>`;
             return html;
         }
 
         document.getElementById('calcForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            // Esconde o teclado no celular quando clica em Calcular
             document.activeElement.blur(); 
-
             const entrada = document.getElementById('entrada').value;
             const escalaSelecionada = document.getElementById('escala').value;
             const intervaloInput = document.getElementById('intervalo').value;
@@ -330,51 +306,26 @@
             const tipoAjuste = document.getElementById('tipo_ajuste').value;
             const tempoAjuste = document.getElementById('tempo_ajuste').value;
 
-            let minutosIntervaloTotal = 0;
-            if (escalaSelecionada !== 'deposito_sabado') {
-                minutosIntervaloTotal = timeToMinutes(intervaloInput);
-            }
-
-            const configEscala = escalas[escalaSelecionada];
-            const saldoMinutosTrabalho = (configEscala.horas * 60) + configEscala.minutos;
-
-            let minutosAjuste = 0;
-            let alertaExtra = false;
-
-            if (usarAjuste && tempoAjuste) {
-                minutosAjuste = timeToMinutes(tempoAjuste);
-                if (tipoAjuste === 'devendo' && minutosAjuste > 120) {
-                    alertaExtra = true;
-                }
-            }
+            let minutosIntervaloTotal = (escalaSelecionada !== 'deposito_sabado') ? timeToMinutes(intervaloInput) : 0;
+            const saldoMinutosTrabalho = (escalas[escalaSelecionada].horas * 60) + escalas[escalaSelecionada].minutos;
+            let minutosAjuste = (usarAjuste && tempoAjuste) ? timeToMinutes(tempoAjuste) : 0;
 
             let htmlResultados = "";
-
-            if (alertaExtra) {
-                htmlResultados += `<div class="alert-box" style="border-color: #ffaa00; color: #ffaa00;">
-                    ⚠️ ALERTA DE H.E: O ajuste ultrapassa o limite legal de 2h extras diárias.
-                </div>`;
+            if (tipoAjuste === 'devendo' && minutosAjuste > 120) {
+                htmlResultados += `<div class="alert-box" style="border-color: #ffaa00; color: #ffaa00;">⚠️ ALERTA: Mais de 2h extras!</div>`;
             }
 
             if (usarAjuste && minutosAjuste > 0) {
-                const resFim = calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, minutosAjuste, tipoAjuste, 'fim');
-                const resInicio = calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, minutosAjuste, tipoAjuste, 'inicio');
-                
-                htmlResultados += renderScenario("Opção 1: Ajuste no Final (Saída)", resFim);
-                htmlResultados += renderScenario("Opção 2: Ajuste no Início (Entrada)", resInicio, 'alt');
+                htmlResultados += renderScenario("Opção 1: Ajuste na Saída", calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, minutosAjuste, tipoAjuste, 'fim'));
+                htmlResultados += renderScenario("Opção 2: Ajuste na Entrada", calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, minutosAjuste, tipoAjuste, 'inicio'), 'alt');
             } else {
-                const resNormal = calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, 0, '', 'fim');
-                htmlResultados += renderScenario("Jornada Padrão", resNormal);
+                htmlResultados += renderScenario("Jornada Padrão", calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, 0, '', 'fim'));
             }
 
             const divResultados = document.getElementById('resultados');
             divResultados.innerHTML = htmlResultados;
             divResultados.style.display = 'block';
-
-            // Desliza a tela suavemente para mostrar os resultados
-            setTimeout(() => {
-                divResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+            setTimeout(() => { divResultados.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
         });
     </script>
 </body>
