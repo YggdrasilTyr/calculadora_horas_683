@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Atacadão - Premium</title>
+    <style>
+        :root {
+            --atacadao-orange: #F37021;
+            --atacadao-green: #00b300;
+            --atacadao-blue: #3498db;
+            --atacadao-red: #ff3333;
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --input-bg: #2d2d2d;
+            --input-border: #404040;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 15px; }
+        .card { background-color: var(--card-bg); border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); width: 100%; max-width: 450px; border-top: 6px solid var(--atacadao-orange); margin-bottom: 20px;}
+        .header { padding: 15px; text-align: center; border-bottom: 1px solid #333; }
+        .header h1 { font-size: 18px; color: var(--atacadao-orange); text-transform: uppercase; letter-spacing: 1px; }
+        .content { padding: 20px; }
+        
+        .row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .input-group { flex: 1; }
+        .input-group label { display: block; font-size: 12px; margin-bottom: 6px; color: #aaa; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; color: white; color-scheme: dark; }
+        .input-group input:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .toggle-container { display: flex; align-items: center; margin-bottom: 15px; background: #262626; padding: 10px; border-radius: 8px; cursor: pointer; border: 1px solid #333; }
+        .toggle-container input { margin-right: 10px; accent-color: var(--atacadao-orange); }
+        
+        button { width: 100%; background: var(--atacadao-green); color: white; border: none; padding: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        button:active { transform: scale(0.98); }
+
+        .results { margin-top: 20px; }
+        
+        .scenario-box { background: #261f1a; border: 1px solid #4a2e1b; padding: 16px; border-radius: 8px; margin-bottom: 15px; }
+        .scenario-box.alt { background: #1a2426; border-color: #1b3a4a; }
+        
+        .scenario-title { font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #444; color: var(--atacadao-orange); }
+        .scenario-box.alt .scenario-title { color: var(--atacadao-blue); border-bottom-color: #2b4a5a; }
+
+        .result-item { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .result-item .label { font-size: 12px; color: #a0a0a0; }
+        .result-item .value { font-size: 16px; font-weight: bold; color: #fff; }
+        
+        .highlight-saida { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #444; display: flex; justify-content: space-between; align-items: center; }
+        .highlight-saida .label { font-size: 13px; color: #fff; font-weight: bold;}
+        .highlight-saida .value { font-size: 26px; font-weight: bold; color: var(--atacadao-green); }
+
+        .alert-box { background: rgba(255, 51, 51, 0.2); border: 1px solid var(--atacadao-red); color: #ff8888; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; text-align: center; font-weight: bold; line-height: 1.4; }
+        .badge-bonus { background: #4a2e1b; color: var(--atacadao-orange); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-top: 5px; display: inline-block; border: 1px solid var(--atacadao-orange); width: 100%; text-align: center;}
+    </style>
+</head>
+<body onload="checkEscala()">
+    <div class="card">
+        <div class="header"><h1>Calculadora de Horas</h1></div>
+        <div class="content">
+            <form id="calcForm">
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Selecione sua Escala:</label>
+                    <select id="escala" onchange="checkEscala()">
+                        <option value="normal">Normal (7h20min)</option>
+                        <option value="deposito">Depósito/Apoio (8h)</option>
+                        <option value="deposito_sabado">Depósito/Apoio(SÁBADO/4H)</option>
+                        <option value="adm">RH/Almox/Adm (8h48min)</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label>Entrada Original:</label>
+                        <input type="time" id="entrada" required>
+                    </div>
+                    <div class="input-group">
+                        <label id="label-intervalo">Intervalo:</label>
+                        <input type="time" id="intervalo" value="01:00" required>
+                    </div>
+                </div>
+
+                <div class="toggle-container" onclick="document.getElementById('usar_ajuste').click();">
+                    <input type="checkbox" id="usar_ajuste" onchange="toggleBanco()">
+                    <label style="cursor: pointer; font-size: 13px; color: white; font-weight: bold;">Ajustar Banco de Horas</label>
+                </div>
+
+                <div id="box-banco-horas" style="display: none; padding-left: 10px; border-left: 2px solid var(--atacadao-orange); margin-bottom: 15px;">
+                    <div class="row">
+                        <div class="input-group">
+                            <label>O que vai fazer?</label>
+                            <select id="tipo_ajuste">
+                                <option value="devendo">Pagar Horas (+)</option>
+                                <option value="pagar">Usar Folga/Sair Cedo (-)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Tempo (Ex: 01:00)</label>
+                            <input type="time" id="tempo_ajuste" value="00:00">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit">Calcular Horários</button>
+            </form>
+
+            <div id="resultados" class="results" style="display: none;">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados das escalas
+        const escalas = {
+            'normal': { horas: 7, minutos: 20 },
+            'deposito': { horas: 8, minutos: 0 },
+            'deposito_sabado': { horas: 4, minutos: 0 },
+            'adm': { horas: 8, minutos: 48 }
+        };
+
+        // Funções de UI
+        function checkEscala() {
+            const escala = document.getElementById('escala').value;
+            const campoIntervalo = document.getElementById('intervalo');
+            const labelIntervalo = document.getElementById('label-intervalo');
+
+            if (escala === 'deposito_sabado') {
+                campoIntervalo.value = "00:00";
+                campoIntervalo.disabled = true;
+                labelIntervalo.style.color = "#555";
+            } else {
+                campoIntervalo.disabled = false;
+                labelIntervalo.style.color = "#aaa";
+                if(campoIntervalo.value === "00:00") campoIntervalo.value = "01:00";
+            }
+        }
+
+        function toggleBanco() {
+            var box = document.getElementById('box-banco-horas');
+            box.style.display = document.getElementById('usar_ajuste').checked ? 'block' : 'none';
+        }
+
+        // Helpers de Data/Tempo
+        function timeToMinutes(timeStr) {
+            if(!timeStr) return 0;
+            const [h, m] = timeStr.split(':').map(Number);
+            return (h * 60) + m;
+        }
+
+        function addMinutes(dateObj, minutes) {
+            return new Date(dateObj.getTime() + minutes * 60000);
+        }
+
+        function formatar(data, referenciaOriginal) {
+            const h = String(data.getHours()).padStart(2, '0');
+            const m = String(data.getMinutes()).padStart(2, '0');
+            let texto = `${h}:${m}`;
+            
+            // Checa se virou o dia (comparando o dia do mês)
+            if (data.getDate() !== referenciaOriginal.getDate()) {
+                texto += " <small style='font-size:10px;'>(Amanhã)</small>";
+            }
+            return texto;
+        }
+
+        // Função Central de Cálculo
+        function calcularCenario(entradaStr, minutosTrabalhoBase, minutosIntervalo, minutosAjuste, tipoAjuste, ondeAplicar) {
+            const [h, m] = entradaStr.split(':').map(Number);
+            // Usamos uma data base fixa (ex: 1 de Janeiro de 2000) para fazer a matemática de horas
+            const entradaOriginal = new Date(2000, 0, 1, h, m, 0);
+            let entradaReal = new Date(entradaOriginal.getTime());
+            let saldoMinutosReal = minutosTrabalhoBase;
+
+            let ajusteParaCalculo = 0;
+            if (minutosAjuste > 0) {
+                ajusteParaCalculo = (tipoAjuste === 'devendo') ? minutosAjuste : -minutosAjuste;
+            }
+
+            if (ondeAplicar === 'inicio' && ajusteParaCalculo !== 0) {
+                entradaReal = addMinutes(entradaReal, -ajusteParaCalculo);
+                saldoMinutosReal = minutosTrabalhoBase + ajusteParaCalculo;
+            } else if (ondeAplicar === 'fim' && ajusteParaCalculo !== 0) {
+                saldoMinutosReal = minutosTrabalhoBase + ajusteParaCalculo;
+            }
+
+            // Regra 5:35h baseada na Entrada REAL
+            const limite5h35 = addMinutes(entradaReal, (5 * 60) + 35);
+
+            // 1. Saída bruta
+            let saidaBruta = addMinutes(entradaReal, saldoMinutosReal + minutosIntervalo);
+
+            // 2. Cálculo do Bônus Noturno (22h às 05h)
+            let minutosNoturnosTrabalhados = 0;
+            let checarHora = new Date(entradaReal.getTime());
+            
+            while (checarHora < saidaBruta) {
+                let horaH = checarHora.getHours();
+                if (horaH >= 22 || horaH < 5) {
+                    minutosNoturnosTrabalhados++;
+                }
+                checarHora = addMinutes(checarHora, 1);
+            }
+
+            let bonusPorBloco = Math.floor(minutosNoturnosTrabalhados / 15) * 2;
+            let bonusExtraTeto = (minutosNoturnosTrabalhados > 120) ? -2 : 0;
+            let bonusTotal = bonusPorBloco + bonusExtraTeto;
+
+            // 3. Aplica o bônus na saída
+            let saidaFinal = addMinutes(saidaBruta, -bonusTotal);
+
+            // Próximo turno (Interjornada 11h)
+            let proximoTurno = addMinutes(saidaFinal, 11 * 60);
+
+            return {
+                entrada: formatar(entradaReal, entradaOriginal),
+                limite_regra: formatar(limite5h35, entradaOriginal),
+                saida: formatar(saidaFinal, entradaOriginal),
+                proximo: formatar(proximoTurno, entradaOriginal),
+                bonus: bonusTotal,
+                alerta_critico: (saldoMinutosReal > 335 && minutosIntervalo === 0)
+            };
+        }
+
+        // Renderização HTML do cenário
+        function renderScenario(titulo, dados, classeExtra = '') {
+            let html = `<div class='scenario-box ${classeExtra}'>
+                            <div class='scenario-title'>${titulo}</div>
+                            <div class='result-item'><span class='label'>📥 Bater Ponto (Entrada):</span><span class='value'>${dados.entrada}</span></div>
+                            <div class='result-item'><span class='label'>🕒 Intervalo obrigatório até:</span><span class='value' style='color: #ffcc00;'>${dados.limite_regra}</span></div>
+                            <div class='result-item'><span class='label'>📅 Retorno Próx. Turno (11h):</span><span class='value' style='color: #bbb;'>${dados.proximo}</span></div>`;
+            
+            if (dados.alerta_critico) {
+                html += `<div class='alert-box' style='margin-top:10px; padding:8px;'>🚨 CRÍTICO: Jornada > 5:35h sem intervalo!</div>`;
+            }
+
+            html += `<div class='highlight-saida'>
+                        <span class='label'>🚪 Horário de Saída:</span>
+                        <span class='value'>${dados.saida}</span>
+                     </div>`;
+            
+            if (dados.bonus > 0) {
+                html += `<div class='badge-bonus'>🌙 BÔNUS NOTURNO APLICADO: -${dados.bonus} MIN</div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        // Tratamento do envio do formulário
+        document.getElementById('calcForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const entrada = document.getElementById('entrada').value;
+            const escalaSelecionada = document.getElementById('escala').value;
+            const intervaloInput = document.getElementById('intervalo').value;
+            const usarAjuste = document.getElementById('usar_ajuste').checked;
+            const tipoAjuste = document.getElementById('tipo_ajuste').value;
+            const tempoAjuste = document.getElementById('tempo_ajuste').value;
+
+            let minutosIntervaloTotal = 0;
+            if (escalaSelecionada !== 'deposito_sabado') {
+                minutosIntervaloTotal = timeToMinutes(intervaloInput);
+            }
+
+            const configEscala = escalas[escalaSelecionada];
+            const saldoMinutosTrabalho = (configEscala.horas * 60) + configEscala.minutos;
+
+            let minutosAjuste = 0;
+            let alertaExtra = false;
+
+            if (usarAjuste && tempoAjuste) {
+                minutosAjuste = timeToMinutes(tempoAjuste);
+                if (tipoAjuste === 'devendo' && minutosAjuste > 120) {
+                    alertaExtra = true;
+                }
+            }
+
+            let htmlResultados = "";
+
+            if (alertaExtra) {
+                htmlResultados += `<div class="alert-box" style="border-color: #ffaa00; color: #ffaa00;">
+                    ⚠️ ALERTA DE H.E: O ajuste está ultrapassando o limite legal de 2 horas extras no dia.
+                </div>`;
+            }
+
+            if (usarAjuste && minutosAjuste > 0) {
+                const resFim = calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, minutosAjuste, tipoAjuste, 'fim');
+                const resInicio = calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, minutosAjuste, tipoAjuste, 'inicio');
+                
+                htmlResultados += renderScenario("Opção 1: Ajuste no Final (Saída)", resFim);
+                htmlResultados += renderScenario("Opção 2: Ajuste no Início (Entrada)", resInicio, 'alt');
+            } else {
+                const resNormal = calcularCenario(entrada, saldoMinutosTrabalho, minutosIntervaloTotal, 0, '', 'fim');
+                htmlResultados += renderScenario("Jornada Padrão", resNormal);
+            }
+
+            const divResultados = document.getElementById('resultados');
+            divResultados.innerHTML = htmlResultados;
+            divResultados.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
