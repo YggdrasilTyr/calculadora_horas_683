@@ -94,7 +94,7 @@
             cursor: pointer; 
             border: 1px solid #333; 
             user-select: none;
-            -webkit-tap-highlight-color: transparent; /* Remove pisca-pisca no clique do iOS */
+            -webkit-tap-highlight-color: transparent;
         }
         
         .toggle-container input { 
@@ -139,14 +139,14 @@
         .badge-bonus { background: rgba(243, 112, 33, 0.1); color: var(--atacadao-orange); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-top: 10px; display: block; border: 1px solid rgba(243, 112, 33, 0.3); text-align: center; }
     </style>
 </head>
-<body onload="checkEscala()">
+<body>
     <div class="card">
         <div class="header"><h1>Calculadora de Horas</h1></div>
         <div class="content">
             <form id="calcForm">
                 <div class="input-group" style="margin-bottom: 16px;">
                     <label>Selecione sua Escala:</label>
-                    <select id="escala" onchange="checkEscala()">
+                    <select id="escala">
                         <option value="normal">Normal (7h20min)</option>
                         <option value="deposito">Depósito/Apoio (8h)</option>
                         <option value="deposito_sabado">Depósito/Apoio (SÁBADO/4H)</option>
@@ -158,10 +158,6 @@
                     <div class="input-group">
                         <label>Entrada Original:</label>
                         <input type="time" id="entrada" required>
-                    </div>
-                    <div class="input-group">
-                        <label id="label-intervalo">Intervalo:</label>
-                        <input type="time" id="intervalo" value="01:00" required>
                     </div>
                 </div>
 
@@ -194,27 +190,13 @@
     </div>
 
     <script>
+        // Intervalos adicionados diretamente na configuração da escala
         const escalas = {
-            'normal': { horas: 7, minutos: 20 },
-            'deposito': { horas: 8, minutos: 0 },
-            'deposito_sabado': { horas: 4, minutos: 0 },
-            'adm': { horas: 8, minutos: 48 }
+            'normal': { horas: 7, minutos: 20, intervaloMinutos: 60 },
+            'deposito': { horas: 8, minutos: 0, intervaloMinutos: 60 },
+            'deposito_sabado': { horas: 4, minutos: 0, intervaloMinutos: 0 },
+            'adm': { horas: 8, minutos: 48, intervaloMinutos: 72 }
         };
-
-        function checkEscala() {
-            const escala = document.getElementById('escala').value;
-            const campoIntervalo = document.getElementById('intervalo');
-            const labelIntervalo = document.getElementById('label-intervalo');
-            if (escala === 'deposito_sabado') {
-                campoIntervalo.value = "00:00";
-                campoIntervalo.disabled = true;
-                labelIntervalo.style.color = "#555";
-            } else {
-                campoIntervalo.disabled = false;
-                labelIntervalo.style.color = "#b0b0b0";
-                if(campoIntervalo.value === "00:00") campoIntervalo.value = "01:00";
-            }
-        }
 
         function toggleBanco() {
             var box = document.getElementById('box-banco-horas');
@@ -317,12 +299,13 @@
             document.activeElement.blur(); 
             const entrada = document.getElementById('entrada').value;
             const escalaSelecionada = document.getElementById('escala').value;
-            const intervaloInput = document.getElementById('intervalo').value;
             const usarAjuste = document.getElementById('usar_ajuste').checked;
             const tipoAjuste = document.getElementById('tipo_ajuste').value;
             const tempoAjuste = document.getElementById('tempo_ajuste').value;
 
-            let minutosIntervaloTotal = (escalaSelecionada !== 'deposito_sabado') ? timeToMinutes(intervaloInput) : 0;
+            // Busca os minutos de intervalo dinamicamente direto da Escala escolhida
+            let minutosIntervaloTotal = escalas[escalaSelecionada].intervaloMinutos;
+            
             const saldoMinutosTrabalho = (escalas[escalaSelecionada].horas * 60) + escalas[escalaSelecionada].minutos;
             let minutosAjuste = (usarAjuste && tempoAjuste) ? timeToMinutes(tempoAjuste) : 0;
 
